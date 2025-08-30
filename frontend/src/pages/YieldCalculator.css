@@ -1,0 +1,66 @@
+/* YieldCalculator.css */
+
+.yield-calculator-card {
+  max-width: 750px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+}
+
+.yield-calculator-card .ant-card-head {
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+  border-radius: 12px 12px 0 0;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.yield-calculator-card .ant-form-item-label > label {
+  font-weight: 600;
+  color: #333;
+}
+
+.yield-calculator-card .ant-btn-primary {
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+
+  font-weight: bold;
+  height: 40px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.yield-calculator-card .ant-btn-primary:hover {
+  background: #1abc9c !important;
+  border-color: #1abc9c !important;
+}
+
+.yield-calculator-card .ant-card {
+  border-radius: 10px;
+  margin-top: 16px;
+}
+
+.yield-calculator-card .ant-card-head-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.yield-calculator-card .ant-typography {
+  font-size: 15px;
+  color: #444;
+}
+
+.yield-calculator-card .ant-table {
+  border-radius: 8px;
+}
+
+.yield-calculator-card .ant-table-thead > tr > th {
+  background: #f0f8f5;
+  font-weight: 600;
+}
+
+.yield-calculator-card .ant-alert {
+  margin-bottom: 16px;
+  border-radius: 8px;
+}

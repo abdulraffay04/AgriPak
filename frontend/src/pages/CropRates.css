@@ -1,0 +1,52 @@
+/* CropRates.css */
+
+.crop-rates-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.crop-rates-container h3 {
+  background: linear-gradient(135deg, #2c3e50, #1abc9c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.crop-rates-container .ant-select {
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.crop-rates-container .ant-select-selector {
+  border-radius: 8px !important;
+  border: 1px solid #1abc9c !important;
+}
+
+.crop-rates-container .ant-table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.crop-rates-container .ant-table-thead > tr > th {
+  background: #e8f8f5;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.crop-rates-container .ant-table-tbody > tr:hover > td {
+  background: #f6fffa !important;
+}
+
+.crop-rates-container .ant-pagination-item-active {
+  border-color: #1abc9c !important;
+}
+
+.crop-rates-container .ant-pagination-item-active a {
+  color: #1abc9c !important;
+  font-weight: 600;
+}

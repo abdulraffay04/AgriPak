@@ -1,0 +1,174 @@
+/* General Chat Container */
+.chat-container {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f2f5;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Farmers List (Left Sidebar) */
+.farmers-list {
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+}
+
+.farmers-list h5 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Search Input */
+.farmers-list input {
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.farmers-list input:focus {
+  outline: none;
+  border-color: #1abc9c;
+  box-shadow: 0 0 5px rgba(26, 188, 156, 0.5);
+}
+
+/* Farmers List Items */
+.farmers-list .list-group-item {
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  transition: background 0.3s, color 0.3s;
+}
+
+.farmers-list .list-group-item:hover {
+  background-color: #f0fef5;
+}
+
+.farmers-list .list-group-item.active {
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Badge for unread messages */
+.farmers-list .badge {
+  font-size: 0.75rem;
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+/* Chat Window */
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  background: #ecf0f1;
+  border-radius: 0 10px 10px 0;
+  overflow: hidden;
+}
+
+/* Chat Header */
+.chat-header {
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+  color: #fff;
+  padding: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Chat Messages */
+.chat-messages {
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #ecf0f1;
+}
+
+.message {
+  display: flex;
+  width: 100%;
+}
+
+.message.justify-content-end {
+  justify-content: flex-end;
+}
+
+.message.justify-content-start {
+  justify-content: flex-start;
+}
+
+.message .p-2 {
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.message .bg-light {
+  background-color: #ffffff;
+  color: #2c3e50;
+}
+
+.message .bg-primary {
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+  color: #fff;
+}
+
+/* Chat Input */
+.chat-input {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #ddd;
+  background: #ecf0f1;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.chat-input input:focus {
+  border-color: #1abc9c;
+  box-shadow: 0 0 5px rgba(26, 188, 156, 0.5);
+}
+
+.chat-input button {
+  margin-left: 0.5rem;
+  border-radius: 50px;
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1.5rem;
+  transition: background 0.3s ease;
+}
+
+.chat-input button:hover {
+  background: linear-gradient(90deg, #1abc9c, #2c3e50);
+}
+
+/* Scrollbar Styling */
+.chat-messages::-webkit-scrollbar,
+.farmers-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb,
+.farmers-list::-webkit-scrollbar-thumb {
+  background-color: rgba(44, 62, 80, 0.5);
+  border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-track,
+.farmers-list::-webkit-scrollbar-track {
+  background-color: transparent;
+}

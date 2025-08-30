@@ -1,0 +1,145 @@
+.container {
+  max-width: 1000px;
+  margin: auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
+}
+
+/* Section Titles */
+.section-title {
+  margin-bottom: 1rem;
+  color: #1abc9c;
+  font-weight: 600;
+}
+
+/* Write Blog Button */
+.btn-write {
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+  color: #fff;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-write:hover {
+  background: linear-gradient(90deg, #1abc9c, #2c3e50);
+}
+
+/* Blog Form */
+.blog-form .form-control {
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+}
+
+.blog-form .form-control:focus {
+  border-color: #1abc9c;
+  box-shadow: 0 0 6px rgba(26, 188, 156, 0.3);
+  outline: none;
+}
+
+.btn-submit {
+  border-radius: 50px;
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+  color: #fff;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+  background: linear-gradient(90deg, #1abc9c, #2c3e50);
+}
+
+/* Blogs Grid */
+.latest-blogs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+/* Blog Card */
+.blog-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.blog-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.blog-card h5 {
+  margin-bottom: 0.25rem;
+}
+
+.blog-card small {
+  color: #7f8c8d;
+}
+
+.blog-card p {
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.read-more {
+  font-weight: 600;
+  color: #1abc9c;
+  cursor: pointer;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.btn-close-modal {
+  margin-top: 1rem;
+  background: linear-gradient(90deg, #2c3e50, #1abc9c);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+}
+
+.btn-close-modal:hover {
+  background: linear-gradient(90deg, #1abc9c, #2c3e50);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .latest-blogs {
+    grid-template-columns: 1fr;
+  }
+}

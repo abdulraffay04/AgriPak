@@ -1,0 +1,85 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Top Bar */
+.dashboard-header {
+    background: linear-gradient(90deg, #2c3e50, #1abc9c);
+    color: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+    position: relative;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 22px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* Body Layout */
+.dashboard-body {
+    flex: 1;
+    display: flex;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+/* Sidebar (desktop default) */
+.sidebar {
+    width: 220px;
+    background: #34495e;
+    color: white;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    position: sticky;
+    top: 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 12px;
+    margin-bottom: 10px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.sidebar button:hover {
+    background: #1abc9c;
+    transform: translateX(5px);
+}
+
+.logout {
+    background: #e74c3c !important;
+    margin-top: 20px;
+}
+
+/* Content Area */
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    height: 100%;
+    background: #f5f6fa;
+    border-left: 2px solid #eee;
+}
+
