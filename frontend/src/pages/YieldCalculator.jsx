@@ -11,6 +11,7 @@ import {
   Typography,
 } from "antd";
 import "./YieldCalculator.css";
+import api from "../services/api";
 
 const { Option } = Select;
 const { Title, Text } = Typography;
@@ -37,7 +38,7 @@ const YieldCalculator = () => {
   // Fetch avg rate for selected crop + province
   const fetchAverageRate = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/prices");
+      const res = await api.get("/api/prices");
       const filtered = res.data.filter(
         (item) =>
           item.commodity?.toLowerCase() === crop.toLowerCase() &&

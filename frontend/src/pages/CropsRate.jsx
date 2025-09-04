@@ -1,9 +1,6 @@
-// src/pages/CropRates.jsx
-
-
 import React, { useEffect, useState } from "react";
 import { Table, Spin, Typography, Select } from "antd";
-import axios from "axios";
+import api from "../services/api"; // ✅ use your central API service
 import "./CropRates.css";
 
 const { Title } = Typography;
@@ -16,49 +13,27 @@ const CropsRate = () => {
   const [selectedCommodity, setSelectedCommodity] = useState(null);
 
   const columns = [
-    {
-      title: "Commodity",
-      dataIndex: "commodity",
-      key: "commodity",
-    },
-    {
-      title: "Product (EN)",
-      dataIndex: "product_en",
-      key: "product_en",
-    },
-    {
-      title: "Product (UR)",
-      dataIndex: "product_ur",
-      key: "product_ur",
-    },
-    {
-      title: "Province",
-      dataIndex: "province",
-      key: "province",
-    },
-    {
-      title: "Min Price",
-      dataIndex: "min",
-      key: "min",
-    },
-    {
-      title: "Max Price",
-      dataIndex: "max",
-      key: "max",
-    },
-    {
-      title: "Avg Price",
-      dataIndex: "avg",
-      key: "avg",
-    },
+    { title: "Commodity", dataIndex: "commodity", key: "commodity" },
+    { title: "Product (EN)", dataIndex: "product_en", key: "product_en" },
+    { title: "Product (UR)", dataIndex: "product_ur", key: "product_ur" },
+    { title: "Province", dataIndex: "province", key: "province" },
+    { title: "Min Price", dataIndex: "min", key: "min" },
+    { title: "Max Price", dataIndex: "max", key: "max" },
+    { title: "Avg Price", dataIndex: "avg", key: "avg" },
   ];
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/prices")
+    api
+      .get("/api/prices")
       .then((res) => {
-        setData(res.data);
-        setFiltered(res.data);
+        if (Array.isArray(res.data)) {
+          setData(res.data);
+          setFiltered(res.data);
+        } else {
+          console.warn("Unexpected response:", res.data);
+          setData([]);
+          setFiltered([]);
+        }
       })
       .catch((err) => {
         console.error("Error fetching prices:", err);
@@ -68,16 +43,14 @@ const CropsRate = () => {
 
   const handleFilterChange = (value) => {
     setSelectedCommodity(value);
-    setFiltered(
-      value ? data.filter((item) => item.commodity === value) : data
-    );
+    setFiltered(value ? data.filter((item) => item.commodity === value) : data);
   };
 
   const uniqueCommodities = [...new Set(data.map((item) => item.commodity))];
 
   return (
     <div className="crop-rates-container">
-  <Title level={3}>All Commodity Prices</Title>
+      <Title level={3}>All Commodity Prices</Title>
 
       <Select
         placeholder="Filter by Commodity"
@@ -109,5 +82,3 @@ const CropsRate = () => {
 };
 
 export default CropsRate;
-
-

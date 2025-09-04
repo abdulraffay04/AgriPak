@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import api from "../services/api"; // ✅ use centralized API service
 
 function DashboardAdmin() {
   const [blogs, setBlogs] = useState([]);
@@ -6,9 +7,8 @@ function DashboardAdmin() {
   // Fetch all blogs (pending + published)
   const fetchBlogs = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/blogs/admin"); 
-      const data = await res.json();
-      setBlogs(data);
+      const res = await api.get("/api/blogs/admin");
+      setBlogs(res.data);
     } catch (error) {
       console.error("Error fetching blogs:", error);
     }
@@ -21,10 +21,8 @@ function DashboardAdmin() {
   // Publish Blog
   const handlePublish = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/blogs/${id}/publish`, {
-        method: "PUT",
-      });
-      fetchBlogs();
+      await api.put(`/api/blogs/${id}/publish`);
+      fetchBlogs(); // refresh list after publishing
     } catch (error) {
       console.error("Error publishing blog:", error);
     }
@@ -34,10 +32,8 @@ function DashboardAdmin() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
     try {
-      await fetch(`http://localhost:5000/api/blogs/${id}`, {
-        method: "DELETE",
-      });
-      fetchBlogs();
+      await api.delete(`/api/blogs/${id}`);
+      fetchBlogs(); // refresh list after deletion
     } catch (error) {
       console.error("Error deleting blog:", error);
     }
@@ -55,7 +51,8 @@ function DashboardAdmin() {
           <div key={blog._id} className="card mb-3 shadow-sm p-3">
             <h5>{blog.title}</h5>
             <small className="text-muted">
-              By {blog.author} • {new Date(blog.createdAt).toLocaleDateString()}
+              By {blog.author} •{" "}
+              {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : ""}
             </small>
             <p className="mt-2">{blog.content}</p>
 

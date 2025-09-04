@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 import "./Chatting.css";
 
-const socket = io("http://localhost:5000");
+const socket = io(process.env.REACT_APP_API_URL || "/");
 
 function Chatting() {
   const [farmers, setFarmers] = useState([]);

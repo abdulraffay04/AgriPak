@@ -1,4 +1,6 @@
+// src/pages/BlogPage.js
 import React, { useEffect, useState } from "react";
+import api from "../services/api"; // adjust the path if your structure differs
 import "./BlogPage.css";
 
 function BlogPage() {
@@ -11,8 +13,7 @@ function BlogPage() {
   // Fetch blogs from API
   const fetchBlogs = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/blogs");
-      const data = await res.json();
+      const { data } = await api.get("/api/blogs");
       setBlogs(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -29,12 +30,7 @@ function BlogPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/blogs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
+      const { data } = await api.post("/api/blogs", form);
       alert(data.message || "Blog submitted");
 
       setForm({ title: "", content: "", author: "" });

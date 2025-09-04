@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import './Auth.css'; // ✅ one css for auth
 
@@ -8,16 +8,22 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user');
+  const [loading, setLoading] = useState(false); // ✅ loading state
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await api.post('/api/auth/register', { name, email, password, role });
+
+      // Optional: if API returns token + user, auto-login the user here
       alert(res.data.msg || 'Registered successfully');
-      navigate('/');
+      navigate('/'); // Go to login
     } catch (err) {
-      alert(err.response?.data?.msg || err.message || 'Signup failed');
+      alert(err?.response?.data?.msg || 'Signup failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,6 +38,7 @@ function Signup() {
           <input
             type="text"
             required
+            autoComplete="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
@@ -43,6 +50,7 @@ function Signup() {
           <input
             type="email"
             required
+            autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter email"
@@ -54,16 +62,28 @@ function Signup() {
           <input
             type="password"
             required
+            autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
           />
         </div>
 
-        <button type="submit" className="btn-submit">Sign Up</button>
+        {/* If role is meant to be selectable (optional) */}
+        {/* <div className="form-group">
+          <label>Role</label>
+          <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div> */}
+
+        <button type="submit" className="btn-submit" disabled={loading}>
+          {loading ? 'Signing up…' : 'Sign Up'}
+        </button>
 
         <p className="switch-text">
-          Already have an account? <a href="/">Login</a>
+          Already have an account? <Link to="/">Login</Link>
         </p>
       </form>
     </div>

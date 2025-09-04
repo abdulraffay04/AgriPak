@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const http = require("http");
 const { Server } = require("socket.io");
+const path = require("path");
 
 dotenv.config();
 
@@ -13,16 +14,30 @@ const priceRoutes = require("./routes/priceRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 
 const app = express();
-app.use(cors());
+
+// --- CORS setup ---
+const allowedOrigin = process.env.CLIENT_URL || "http://localhost:3000";
+
+// Only enable CORS in development; in production, frontend is served by this server
+if (process.env.NODE_ENV !== "production") {
+  app.use(
+    cors({
+      origin: allowedOrigin,
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true,
+    })
+  );
+}
+
 app.use(express.json());
 
-// API Routes
+// --- API Routes ---
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/prices", priceRoutes);
 app.use("/api/blogs", blogRoutes);
 
-// MongoDB connection
+// --- MongoDB connection ---
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -31,13 +46,23 @@ mongoose
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB error:", err.message));
 
-// Create HTTP server
+// --- Serve React build in production ---
+if (process.env.NODE_ENV === "production") {
+  const __dirname1 = path.resolve();
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
+  });
+}
+
+// --- Create HTTP server ---
 const server = http.createServer(app);
 
-// Socket.io setup
+// --- Socket.io setup ---
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // frontend
+    origin: allowedOrigin,
     methods: ["GET", "POST"],
   },
 });
@@ -122,4 +147,6 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+server.listen(PORT, () =>
+  console.log(`🚀 Server running on port ${PORT} (${process.env.NODE_ENV || "development"})`)
+);
