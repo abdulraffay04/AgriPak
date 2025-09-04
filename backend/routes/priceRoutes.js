@@ -85,7 +85,6 @@
 
 
 
-// routes/priceRoutes.js
 const express = require("express");
 const router = express.Router();
 const puppeteer = require("puppeteer");
@@ -100,7 +99,7 @@ const startOfDay = () => {
 
 router.get("/", async (req, res) => {
   try {
-    // 1. Check if today's data exists
+    // 1. Serve today's data if exists
     const todayData = await Price.find({ date: { $gte: startOfDay() } });
     if (todayData.length > 0) {
       console.log("✅ Serving from MongoDB");
@@ -109,20 +108,23 @@ router.get("/", async (req, res) => {
 
     console.log("🌐 Scraping fresh data...");
 
-    // 2. Launch Puppeteer
+    // 2. Launch Puppeteer with proper args for cloud
     const browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-accelerated-2d-canvas",
+        "--disable-gpu",
+      ],
     });
 
     const page = await browser.newPage();
     await page.goto("https://par.com.pk/", { waitUntil: "networkidle0", timeout: 0 });
     await page.waitForSelector(".clickable-tab", { timeout: 15000 });
 
-    const tabCount = await page.evaluate(
-      () => document.querySelectorAll(".clickable-tab").length
-    );
-
+    const tabCount = await page.evaluate(() => document.querySelectorAll(".clickable-tab").length);
     const allData = [];
 
     for (let i = 0; i < tabCount; i++) {
@@ -130,7 +132,7 @@ router.get("/", async (req, res) => {
         document.querySelectorAll(".clickable-tab")[i].click();
       }, i);
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await page.waitForTimeout(3000); // wait for table to load
 
       const commodityName = await page.evaluate(
         (i) => document.querySelectorAll(".clickable-tab span")[i].innerText.trim(),
@@ -140,29 +142,25 @@ router.get("/", async (req, res) => {
       const hasTable = await page.$("#price-discovery-table table tbody tr");
       if (!hasTable) continue;
 
-      await page.waitForSelector("#price-discovery-table table tbody tr", {
-        timeout: 20000,
-      });
+      await page.waitForSelector("#price-discovery-table table tbody tr", { timeout: 20000 });
 
       const data = await page.evaluate(() => {
-        const rows = document.querySelectorAll("#price-discovery-table table tbody tr");
-        const result = [];
-
-        rows.forEach((row) => {
-          const cells = row.querySelectorAll("td");
-          if (cells.length >= 7) {
-            result.push({
-              product_en: cells[0]?.innerText.trim(),
-              product_ur: cells[1]?.innerText.trim(),
-              province: cells[2]?.innerText.trim(),
-              min: cells[4]?.innerText.trim(),
-              max: cells[5]?.innerText.trim(),
-              avg: cells[6]?.innerText.trim(),
-            });
+        return Array.from(document.querySelectorAll("#price-discovery-table table tbody tr")).map(
+          (row) => {
+            const cells = row.querySelectorAll("td");
+            if (cells.length >= 7) {
+              return {
+                product_en: cells[0]?.innerText.trim(),
+                product_ur: cells[1]?.innerText.trim(),
+                province: cells[2]?.innerText.trim(),
+                min: cells[4]?.innerText.trim(),
+                max: cells[5]?.innerText.trim(),
+                avg: cells[6]?.innerText.trim(),
+              };
+            }
+            return null;
           }
-        });
-
-        return result;
+        ).filter(Boolean);
       });
 
       const tagged = data.map((row) => ({ commodity: commodityName, ...row }));
