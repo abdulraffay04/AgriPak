@@ -16,9 +16,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const app = express();
 
 // --- CORS setup ---
-const allowedOrigin = process.env.CLIENT_URL || "http://localhost:3000";
-
-// Only enable CORS in development; in production, frontend is served by this server
+const allowedOrigin = process.env.CLIENT_URL || "*";
 if (process.env.NODE_ENV !== "production") {
   app.use(
     cors({
@@ -49,11 +47,12 @@ mongoose
 // --- Serve React build in production ---
 if (process.env.NODE_ENV === "production") {
   const __dirname1 = path.resolve();
-  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+  app.use(express.static(path.join(__dirname1, "frontend/build")));
 
-  app.get(/.*/, (req, res) => {
-  res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"));
-});
+  // Fix for React routing in production
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname1, "frontend/build", "index.html"));
+  });
 }
 
 // --- Create HTTP server ---
@@ -73,13 +72,10 @@ let onlineFarmers = {};
 io.on("connection", (socket) => {
   console.log("⚡ Farmer connected:", socket.id);
 
-  // ✅ Farmer joins with name
   socket.on("join", ({ name }) => {
-    // Remove duplicate entries
+    // Remove duplicate names
     for (const id in onlineFarmers) {
-      if (onlineFarmers[id].name === name) {
-        delete onlineFarmers[id];
-      }
+      if (onlineFarmers[id].name === name) delete onlineFarmers[id];
     }
 
     onlineFarmers[socket.id] = {
@@ -92,7 +88,6 @@ io.on("connection", (socket) => {
     console.log("✅ JOIN:", socket.id, name);
   });
 
-  // ✅ Handle private messages
   socket.on("privateMessage", ({ toUserId, message }) => {
     const sender = onlineFarmers[socket.id];
     const recipient = onlineFarmers[toUserId];
@@ -104,17 +99,13 @@ io.on("connection", (socket) => {
         fromName: sender?.name || "Unknown",
       });
 
-      // track unread count
-      if (!recipient.unread[sender.name]) {
-        recipient.unread[sender.name] = 0;
-      }
+      if (!recipient.unread[sender.name]) recipient.unread[sender.name] = 0;
       recipient.unread[sender.name] += 1;
     }
 
     sendFarmersList();
   });
 
-  // ✅ Reset unread count when opening chat
   socket.on("resetUnread", ({ chatWith }) => {
     if (onlineFarmers[socket.id]) {
       onlineFarmers[socket.id].unread[chatWith] = 0;
@@ -122,14 +113,12 @@ io.on("connection", (socket) => {
     sendFarmersList();
   });
 
-  // ✅ Handle disconnect
   socket.on("disconnect", () => {
     console.log("❌ Farmer disconnected:", socket.id);
     delete onlineFarmers[socket.id];
     sendFarmersList();
   });
 
-  // ✅ Send updated farmers list
   function sendFarmersList() {
     const uniqueFarmers = Object.values(onlineFarmers).filter(
       (v, i, self) => i === self.findIndex((f) => f.name === v.name)
